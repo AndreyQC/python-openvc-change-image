@@ -24,3 +24,9 @@
 
 
         pip3 freeze > requirements.txt
+
+- Install packages
+  
+        pip3 install vosk
+        pip install speechkit
+

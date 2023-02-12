@@ -132,3 +132,6 @@ dmypy.json
 image templates/template_to_replace_01.png
 image templates/template_to_replace_03.png
 image templates/template_to_replace_02.png
+src/config/image templates/template_to_replace_01.png
+src/config/image templates/template_to_replace_02.png
+src/config/image templates/template_to_replace_03.png

@@ -1,0 +1,21 @@
+{
+    "config": "replace_template_in_video",
+    "description" :"configuration for script which will try to find templates in video and replace them",
+    "replace-templates": [
+        {
+            "name": "logo-01",
+            "tempalate-file": "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\template_to_replace_01.png",
+            "replace-file": "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\logo_01.png"
+        },
+        {
+            "name": "logo-02",
+            "tempalate-file": "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\template_to_replace_02.png",
+            "replace-file": "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\logo_02.png"
+        },
+        {
+            "name": "logo-03",
+            "tempalate-file": "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\template_to_replace_03.png",
+            "replace-file": "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\logo_03.png"
+        }
+    ]
+}
