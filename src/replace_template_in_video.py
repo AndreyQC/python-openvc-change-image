@@ -20,6 +20,18 @@
 # пропал звук в выходном файле - решено сначала отделением звука и присоединением к готовому
 # качество хромает - сначала сжимал вилео чтобы помещалось на экран. не надо. сохранять оригинальный размер
 
+
+# ====================================================================================================================
+#   1. set up congiguration in Config class
+#       use config_empty.json first
+#       CFG_DEBUGMODE = True
+#  2. run
+#       create templates
+#       congigure config.json    
+#  3. run with CFG_DEBUGMODE = True and config.json    
+# =====================================================================================================================
+
+
 import cv2
 import numpy as np
 import os
@@ -54,12 +66,14 @@ class Config(object):
         VIDEO_OUTPUT_PATH : path for changed video files
            
     """
-    VIDEO_SOURCE_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL2\input'
-    VIDEO_OUTPUT_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL2\output'
-    VIDEO_WORKING_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL2\in_progress'
+    CFG_WORKING_PATH = r'D:\Projects\Video as a source'
+    VIDEO_SOURCE_PATH = r'D:\Projects\Video as a source\input'
+    VIDEO_OUTPUT_PATH = r'D:\Projects\Video as a source\output'
+    VIDEO_WORKING_PATH = r'D:\Projects\Video as a source\in_progress'
     VIDEO_TEMPLATE_PATH = r'C:\repos\personal\python-openvc-change-image\image templates'
     CFG_EXCLUDED_PATHS = r''
-    CFG_WORKING_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL2\input'
+    CFG_DEBUGMODE = False
+    
     CFG_TEMPLATE_CONFIG_FILE = r'C:\repos\personal\python-openvc-change-image\src\config\config.json'
     
 
@@ -239,6 +253,68 @@ def replace_templates_in_video(video_file_path,tempalate_config,debug_mode=False
 
 
 @timeit
+def get_main_scenes_in_video(video_file_path,debug_mode=False):
+    """
+    function: save_audio_from_video
+
+            Parameters:
+                    video_file_path: path to file
+                    tempalate_config: json config
+                    debug_mode: False - no ouput to window
+                                True - output to window
+
+            Returns:
+                    file_result: full path to audio file
+    """   
+
+    capImg = cv2.VideoCapture(os.path.join(Config.VIDEO_SOURCE_PATH, video_file_path))
+  
+    # трешхолд по ловле
+    threshold = 0.8
+
+    frame_width = int(capImg.get(3))
+    frame_height = int(capImg.get(4))
+
+
+
+    current_frame_number = 1
+    while(capImg.isOpened()):
+
+        ret, frame = capImg.read()
+
+        if frame is None:
+            break
+        current_frame_number = current_frame_number +1 
+        print(f'current frame = {current_frame_number}', end="\r", flush=True)
+
+        frame_gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+
+        res = list()
+
+
+
+
+        if debug_mode:
+            cv2.imshow("video_mask", frame_gray)
+            # в окне video_frame вырезку из кадра
+            cv2.imshow("video_frame", frame)
+            # организуем выход из цикла по нажатию клавиши
+            key_press = cv2.waitKey(30)
+            if key_press == ord('q'):
+                break             
+
+       
+    print("all frames were processed", flush=False)
+    print(f"Number of processed frames = {current_frame_number}")
+    # clean up
+    capImg.release()
+    cv2.destroyAllWindows()
+
+
+    return file_video_result
+
+
+@timeit
 def combine_video_and_audio(video_file, audio_file):
     """
     function: combine_video_and_audio
@@ -290,7 +366,7 @@ def enrich_template_config(template_config):
                     dict: json config
     """
     for tmplt in template_config['replace-templates']:
-        print(tmplt)
+        # print(tmplt)
         img = cv2.imread(tmplt['tempalate-file'] ,cv2.IMREAD_GRAYSCALE)
         tmplt['tempalate-file-cv2'] = img
         tmplt['replace-file-cv2'] = cv2.imread(tmplt['replace-file'])
@@ -302,20 +378,19 @@ def enrich_template_config(template_config):
 
 
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
 
-    mp = FilesToReview()
-    mp.config = "config"
+    files_to_process = FilesToReview()
+    files_to_process.config = "config"
     # get a list of files to process
-    mp.files = [f for f in get_files_by_path(Config.VIDEO_SOURCE_PATH, Config.CFG_EXCLUDED_PATHS) if f['fileextension'] == '.mp4']
-
+    files_to_process.files = [f for f in get_files_by_path(Config.VIDEO_SOURCE_PATH, Config.CFG_EXCLUDED_PATHS) if f['fileextension'] == '.mp4']
     # read json config
     template_config = enrich_template_config(read_config_from_json(Config.CFG_TEMPLATE_CONFIG_FILE))
 
-    for vf in mp.files:
+    for vf in files_to_process.files:
         print(f"start processing the video file - {vf['filefullpath']}")     
         # заменяем темплейты   
-        file_video_result = replace_templates_in_video(vf['filefullpath'],template_config,False)
+        file_video_result = replace_templates_in_video(vf['filefullpath'],template_config,Config.CFG_DEBUGMODE)
         # сохраним аудиодорожку так как предыдущий вызов не сохраняет звук
         saved_audio = save_audio_from_video(vf['filefullpath'])
         # соединяем обратно

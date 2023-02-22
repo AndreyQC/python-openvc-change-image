@@ -1,0 +1,5 @@
+{
+    "config": "replace_template_in_video",
+    "description" :"configuration for script which will try to find templates in video and replace them",
+    "replace-templates": []
+}

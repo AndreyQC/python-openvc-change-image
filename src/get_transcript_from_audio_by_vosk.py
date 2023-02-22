@@ -1,6 +1,8 @@
 from vosk import Model, KaldiRecognizer, SetLogLevel
 import os
 import json
+import wave
+from pydub import AudioSegment
 
 # https://alphacephei.com/vosk/install 
 # https://stackoverflow.com/questions/68175694/how-to-use-wave-file-as-input-in-vosk-speech-recognition
@@ -8,9 +10,17 @@ import json
 # https://alphacephei.com/vosk/models - models
 # https://towardsdatascience.com/transcribe-large-audio-files-offline-with-vosk-a77ee8f7aa28
 # https://github.com/alphacep/vosk-api/blob/master/python/example/test_text.py
+# https://stackoverflow.com/questions/5120555/how-can-i-convert-a-wav-from-stereo-to-mono-in-python
+# http://pydub.com/
+# https://alphacephei.com/vosk/models
 
 
 class Config(object):
+    CFG_WORKING_PATH = r"D:\-=Video convertation=-\in_progress"
+    CFG_VOSK_MODEL_PATH = r"D:\-=VOSK MODELS=-\vosk-model-ru-0.22"
+    CFG_AUDIO_FILE = r"D:\-=Video convertation=-\in_progress\ASQL_1 OLAP vs OLTP.wav"
+    CFG_AUDIO_FILE = r"D:\-=Video convertation=-\in_progress\converted audio.wav"
+    
     VIDEO_SOURCE_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL1\input'
     VIDEO_OUTPUT_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL1\output'
     VIDEO_WORKING_PATH = r'C:\Users\Andrey_Potapov\YandexDisk\Загрузки\CrossBILab\Module_3_SQL_Foundation\SQL1\in_progress'
@@ -22,18 +32,21 @@ def get_text_from_voice(filename):
     SAMPLE_RATE = 16000
     SetLogLevel(0)
 
-    model = Model(lang="en-us")
+    # model = Model(lang="en-us")
 
-    if not os.path.exists("model"):
-        print ("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
+    if not os.path.exists(Config.CFG_VOSK_MODEL_PATH):
+        print (f"Please download the model from https://alphacephei.com/vosk/models and unpack to {Config.CFG_VOSK_MODEL_PATH}.")
         exit (1)
 
     wf = wave.open(filename, "rb")
+
     if wf.getnchannels() != 1 or wf.getsampwidth() != 2 or wf.getcomptype() != "NONE":
         print ("Audio file must be WAV format mono PCM.")
+        # need to convert
         exit (1)
 
-    model = Model("model")
+
+    model = Model(Config.CFG_VOSK_MODEL_PATH)
     rec = KaldiRecognizer(model, wf.getframerate())
     rec.SetWords(True)
 
@@ -71,5 +84,19 @@ def get_text_from_voice(filename):
 
     return txt_str
 
+def convert_audio_file(audio_file_path):
+    """_summary_
+
+    Args:
+        audio_file_path (_type_): _description_
+    """
+    sound = AudioSegment.from_wav(audio_file_path)
+    sound = sound.set_channels(1)
+    sound.export(os.path.join(Config.CFG_WORKING_PATH, "converted audio.wav") , format="wav")
+
 if __name__ == '__main__':    
     print('here')
+    # convert_audio_file(Config.CFG_AUDIO_FILE)
+    text_from_file = get_text_from_voice(Config.CFG_AUDIO_FILE)
+    print(text_from_file)
+
