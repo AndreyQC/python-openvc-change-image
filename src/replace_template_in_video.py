@@ -1,20 +1,3 @@
-# Использованные материалы
-# https://opencv.org/opencv-free-course/
-# https://stackoverflow.com/questions/10991523/opencv-draw-an-image-over-another-image
-# https://docs.opencv.org/4.x/d4/dc6/tutorial_py_template_matching.html
-# https://www.codingforentrepreneurs.com/blog/open-cv-python-change-video-resolution-or-scale/
-# https://i7y.org/en/how-to-handle-video-and-audio-with-opencv/
-# https://learnopencv.com/read-write-and-display-a-video-using-opencv-cpp-python/
-# https://habr.com/ru/post/678706/ - пример разпознования объектов с видео
-# https://www.youtube.com/watch?v=ObmuflX8Ank&t=46s 
-# https://stackoverflow.com/questions/56371365/how-i-can-insert-images-on-captured-video-in-python - работает вставка картинки
-# https://www.geeksforgeeks.org/text-detection-and-extraction-using-opencv-and-ocr/ - разпознать текст с видео
-# https://demo.neural-university.ru/ - сайт 
-# https://alphacephei.com/vosk/install - распознование речи 
-# https://stackoverflow.com/questions/48728145/video-editing-with-python-adding-a-background-music-to-a-video-with-sound
-# https://docs.opencv.org/3.4/dd/d43/tutorial_py_video_display.html - different codecs - 'XVID'
-# https://moviepy.readthedocs.io/en/latest/ref/VideoClip/VideoClip.html - разные кодеки
-
 # проблемы
 # выходное видео длинее оригинального - ??? решено - frame rate должен совпадать для видео источника и целевого
 # пропал звук в выходном файле - решено сначала отделением звука и присоединением к готовому
@@ -28,7 +11,7 @@
 #  2. run
 #       create templates
 #       congigure config.json    
-#  3. run with CFG_DEBUGMODE = True and config.json    
+#  3. run with CFG_DEBUGMODE = False and config.json    
 # =====================================================================================================================
 
 
