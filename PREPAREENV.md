@@ -29,4 +29,6 @@
   
         pip3 install vosk
         pip install speechkit
+        pip install -U pip setuptools wheel
+        pip install ruamel.yaml
 

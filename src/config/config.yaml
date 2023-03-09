@@ -1,0 +1,42 @@
+appName: VIDEO_FIXER
+logLevel: WARN
+authors:
+  - Andrey Potapov
+  - Miroslav Potapov
+
+paths:
+  workingpath: 'D:\Projects\Video as a source\temp'
+  video_source_path: 'D:\Projects\Video as a source\input'
+  excluded_paths: ''
+  template_config_file: 'C:\repos\personal\python-openvc-change-image\src\config\config.json'
+  debugmode: True
+  create_scenes: True
+  recognize_topics_on_scenes: True
+  recognize_speach: True
+
+replace-config:
+  replace-templates:
+    - name: "logo-01"
+      tempalate-file: "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\template_to_replace_01.png"
+      replace-file: "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\logo_01.png"
+    - name: "logo-02"
+      tempalate-file: "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\template_to_replace_02.png"
+      replace-file: "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\logo_02.png"
+    - name: "logo-03"
+      tempalate-file: "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\template_to_replace_03.png"
+      replace-file: "C:\\repos\\personal\\python-openvc-change-image\\src\\config\\image templates\\logo_03.png"
+
+
+databases:
+  postgres:
+    host: rc1a-lsohunqdlnlwpe3j.mdb.yandexcloud.net
+    port: 6432
+    sslmode: verify-full
+    dbname: object-universe
+    user: andreyqc
+    username: user
+    target_session_attrs: read-write    
+    password: WEB_FLASK_POSTGRES_DB_PWD
+
+
+  
